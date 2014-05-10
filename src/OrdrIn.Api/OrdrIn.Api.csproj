@@ -43,6 +43,12 @@
     <Compile Include="Resources\MenuItem.cs" />
     <Compile Include="Resources\Address.cs" />
     <Compile Include="Restaurants.cs" />
+    <Compile Include="Deserializers\RestaurantDeserializer.cs" />
+    <Compile Include="Deserializers\OrdrInDeserializer.cs" />
+    <Compile Include="Resources\RestaurantBase.cs" />
+    <Compile Include="Resources\DeliverableRestaurant.cs" />
+    <Compile Include="Utilities\DictionaryExtensions.cs" />
+    <Compile Include="Resources\Cuisine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -50,5 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Deserializers\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
 </Project>

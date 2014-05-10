@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace OrdrIn.Api.Resources
+﻿namespace OrdrIn.Api.Resources
 {
-	public enum Cuisine {
-		
-	}
+	using System;
+	using System.Collections.Generic;
+	using RestSharp.Deserializers;
 
-	public class Restaurant : ResourceBase
+	public class Restaurant : RestaurantBase
 	{
-		public string Address { get; set; }
-		public string City { get; set; }
 		public ICollection<Cuisine> Cuisines { get; set; }
 	}
 }

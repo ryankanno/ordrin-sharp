@@ -9,10 +9,14 @@ namespace OrdrIn.Api
 		private readonly string accountPublicKey;
 		private RestClient client;
 		
-		public OrdrInClient (string accountPublicKey, string accountPrivateKey)
+		public OrdrInClient (string accountPublicKey) 
 		{
 			this.ApiVersion = "1";
-			this.ApiBaseUrl = "http://foo.bar";
+#if DEBUG
+			this.ApiBaseUrl = "https://r-test.ordr.in/";
+#else
+			this.ApiBaseUrl = "https://r.ordr.in/";
+#endif
 			this.accountPublicKey = accountPublicKey;
 			this.client = this.GetRestClientImpl();
 		}
@@ -32,16 +36,24 @@ namespace OrdrIn.Api
 			}
 		}	
 
-		protected virtual T Execute<T>(RestRequest request) 
+		protected virtual T Execute<T>(IRestRequest request) 
 			where T : new()
 		{
 			var response = this.client.Execute<T>(request);
 			return response.Data;
 		}
 
+		protected virtual IRestResponse Execute(IRestRequest request)
+		{
+			return this.client.Execute(request);
+		}
+
 		private RestClient GetRestClientImpl() 
 		{
-			return new RestClient();	
+			var client = new RestClient ();
+			client.BaseUrl = this.ApiBaseUrl;
+			this.AddClientAuthenticationHeader (client);
+			return client;
 		}
 
 		private void AddClientAuthenticationHeader(RestClient client)

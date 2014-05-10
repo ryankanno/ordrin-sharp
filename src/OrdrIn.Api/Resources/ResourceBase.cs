@@ -4,8 +4,5 @@
 
 	public abstract class ResourceBase
 	{
-		public ResourceBase ()
-		{
-		}
 	}
 } 

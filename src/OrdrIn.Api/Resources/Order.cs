@@ -1,12 +1,9 @@
-﻿using System;
-
-namespace OrdrIn.Api.Resources
+﻿namespace OrdrIn.Api.Resources
 {
-	public class Order
+	using System;
+
+	public class Order : ResourceBase
 	{
-		public Order ()
-		{
-		}
 	}
 }
 
