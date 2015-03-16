@@ -31,6 +31,7 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -49,6 +50,17 @@
     <Compile Include="Resources\DeliverableRestaurant.cs" />
     <Compile Include="Utilities\DictionaryExtensions.cs" />
     <Compile Include="Resources\Cuisine.cs" />
+    <Compile Include="Users.cs" />
+    <Compile Include="Orders.cs" />
+    <Compile Include="Resources\OptionItem.cs" />
+    <Compile Include="Resources\MenuGroup.cs" />
+    <Compile Include="Resources\OptionGroup.cs" />
+    <Compile Include="Resources\Availability.cs" />
+    <Compile Include="Request\AuthenticatedUserRequest.cs" />
+    <Compile Include="Request\OrdrInBaseRequest.cs" />
+    <Compile Include="Deserializers\DynamicJsonSerializer.cs" />
+    <Compile Include="Utilities\CryptoUtilities.cs" />
+    <Compile Include="Resources\Tray.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -58,5 +70,6 @@
     <Folder Include="Resources\" />
     <Folder Include="Deserializers\" />
     <Folder Include="Utilities\" />
+    <Folder Include="Request\" />
   </ItemGroup>
 </Project>

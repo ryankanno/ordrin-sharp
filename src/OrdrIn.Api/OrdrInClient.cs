@@ -1,70 +1,70 @@
 ﻿using System;
 using RestSharp;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace OrdrIn.Api
 {
 	public partial class OrdrInClient
 	{
-		private readonly string accountPublicKey;
-		private RestClient client;
+		private const string AuthenticationHeader = "X-NAAMA-CLIENT-AUTHENTICATION";
+		private const string AuthenticationHeaderFormat = "id=\"{0}\", version=\"{1}\"";
+
+		private readonly string accountPrivateKey;
+		private readonly Lazy<RestClient> client;
 		
-		public OrdrInClient (string accountPublicKey) 
+		public OrdrInClient (string accountPrivateKey) 
 		{
-			this.ApiVersion = "1";
-#if DEBUG
-			this.ApiBaseUrl = "https://r-test.ordr.in/";
-#else
-			this.ApiBaseUrl = "https://r.ordr.in/";
-#endif
-			this.accountPublicKey = accountPublicKey;
-			this.client = this.GetRestClientImpl();
+			this.accountPrivateKey = accountPrivateKey;
+			this.client = new Lazy<RestClient>(() => this.GetRestClientImpl(this.accountPrivateKey, this.ApiVersion)); 
 		}
 
-		public string ApiVersion { get; private set; }
-		public string ApiBaseUrl { get; private set; }
+		public string ApiVersion { get { return "1"; } }
+		public string ApiBaseUrl { get; set; } 
 
 		public IWebProxy Proxy 
 		{ 
 			get 
 			{
-				return this.client.Proxy;
+				return this.Client.Proxy;
 			}	
 			set
 			{
-				this.client.Proxy = value;	
+				this.Client.Proxy = value;	
 			}
 		}	
+
+		protected RestClient Client 
+		{
+			get
+			{
+				return this.client.Value;		
+			}
+		}
 
 		protected virtual T Execute<T>(IRestRequest request) 
 			where T : new()
 		{
-			var response = this.client.Execute<T>(request);
+			var response = this.Client.Execute<T>(request);
 			return response.Data;
 		}
 
 		protected virtual IRestResponse Execute(IRestRequest request)
 		{
-			return this.client.Execute(request);
+			return this.Client.Execute(request);
 		}
 
-		private RestClient GetRestClientImpl() 
+		private RestClient GetRestClientImpl(string privateKey, string version)
 		{
 			var client = new RestClient ();
-			client.BaseUrl = this.ApiBaseUrl;
-			this.AddClientAuthenticationHeader (client);
+			client.AddDefaultHeader (AuthenticationHeader, string.Format(AuthenticationHeaderFormat, privateKey, version));
 			return client;
 		}
 
-		private void AddClientAuthenticationHeader(RestClient client)
+		private void SetClientBaseUrl(string baseUrl)
 		{
-			var authenticationHeader = this.GetAuthenticationHeader (this.accountPublicKey, this.ApiVersion);
-			client.AddDefaultHeader ("X-NAAMA-CLIENT-AUTHENTICATION", authenticationHeader);
+			this.Client.BaseUrl = baseUrl;		
 		}
-
-		private string GetAuthenticationHeader(string authenticationKey, string version)
-		{
-			return string.Format("id=\"{0}\", version=\"{1}\"", authenticationKey, version);
-		}
-	}
+    }
 } 

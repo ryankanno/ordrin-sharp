@@ -28,6 +28,47 @@
 		public abstract string Namespace { get; set; }
 		public abstract string DateFormat { get; set; }
 		#endregion
-	}
-}
 
+		protected double ParseDouble(object value)
+		{
+			return this.Parse<double>(
+				((v) => double.Parse(v as string, System.Globalization.CultureInfo.InvariantCulture)), 
+				value, 
+				double.MinValue);
+		}
+
+		protected decimal ParseMoney(object value)
+		{
+			return this.Parse<decimal>(
+				((v) => decimal.Parse(v as string, System.Globalization.NumberStyles.Currency)),
+				value, 
+				decimal.MinValue);
+		}
+
+		protected virtual T Parse<T>(Func<object, T> parseFunc, object value, T defaultValue)
+		{
+			try
+			{
+				return parseFunc(value); 
+			}
+			catch
+			{
+				return defaultValue;
+			}
+		}
+
+		protected ICollection<T> MapJsonListToType<T, U>(IList<object> jsonItems, Func<U, T> func) where U : class
+		{
+			return jsonItems.Select(item => func(item as U)).ToList();
+		}
+
+		protected void SetProperty<T>(T instance, string propertyName, object value)
+		{
+			var prop = typeof(T).GetProperty (propertyName);
+			if (null != prop)
+			{
+				prop.SetValue(instance, value, null);
+			}
+		}
+	}
+} 

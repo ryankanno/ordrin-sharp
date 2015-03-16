@@ -7,9 +7,9 @@ namespace OrdrIn.Api.Resources
 	{
 		public Menu() 
 		{
-			this.MenuItems = new List<MenuItem>();
+			this.MenuGroups = new List<MenuGroup>();
 		}
 
-		public ICollection<MenuItem> MenuItems { get; set; }
+		public ICollection<MenuGroup> MenuGroups { get; set; }
 	}
 }
